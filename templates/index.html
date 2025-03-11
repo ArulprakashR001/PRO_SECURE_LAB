@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRO-SECURE-LABS</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <h1>PRO-SECURE-LABS</h1>
+                <p>Advanced Security Scanning Tool</p>
+            </div>
+            <nav class="navbar">
+                <a href="#" class="nav-link active">Home</a>
+                <a href="#" class="nav-link">Features</a>
+                <a href="#" class="nav-link">About</a>
+                <a href="#" class="nav-link">Contact</a>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="scan-section">
+                <h2>Scan Your Website</h2>
+                <p>Enter the URL of your website to perform a comprehensive security scan.</p>
+                <form id="scanForm">
+                    <input type="text" id="urlInput" placeholder="Enter URL (e.g., https://example.com)" required>
+                    <button type="submit">Start Scan</button>
+                </form>
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progress" class="progress" style="display: none;">
+                <div class="progress-bar"></div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section">
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="results">Scan Results</button>
+                    <button class="tab-button" data-tab="download">Download Report</button>
+                </div>
+                <div id="results" class="results tab-content active"></div>
+                <div id="download" class="results tab-content" style="display: none;">
+                    <h3>Download Report</h3>
+                    <a id="downloadLink" href="#" style="display: none;">Download Security Scan Report</a>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2023 PRO-SECURE-LABS. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#scanForm').on('submit', function(event) {
+                event.preventDefault();
+                const url = $('#urlInput').val();
+                $('#progress').show();
+                $('.progress-bar').css('width', '0%').text('0%');
+                $('#results').empty();
+                $('#downloadLink').hide();
+
+                const eventSource = new EventSource(`/scan?url=${encodeURIComponent(url)}`);
+                eventSource.onmessage = function(event) {
+                    const data = JSON.parse(event.data);
+                    if (data.progress !== undefined) {
+                        $('.progress-bar').css('width', `${data.progress}%`).text(`${data.progress}%`);
+                    } else if (data.error) {
+                        $('#results').html(`<p class="error">${data.error}</p>`);
+                        eventSource.close();
+                    } else {
+                        $('#results').html(`
+                            <h3>Scan Results for ${data.url}</h3>
+                            <div class="result-frame">
+                                <h4>Missing Security Headers</h4>
+                                <table class="result-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Header</th>
+                                            <th>Impact</th>
+                                            <th>Severity</th>
+                                            <th>Recommendation</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${Object.entries(data.missing_headers).map(([header, details]) => `
+                                            <tr>
+                                                <td>${header}</td>
+                                                <td>${details.vulnerability}</td>
+                                                <td><span class="severity ${details.severity.toLowerCase()}">${details.severity}</span></td>
+                                                <td>${details.recommendation}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="result-frame">
+                                <h4>Open Ports</h4>
+                                <table class="result-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Port</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${data.open_ports.map(port => `
+                                            <tr>
+                                                <td>${port}</td>
+                                                <td><span class="status-open">Open</span></td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        `);
+
+                        // Show download link
+                        $('#downloadLink').show().attr('href', '/download_report');
+                        eventSource.close();
+                    }
+                };
+            });
+
+            // Tab functionality
+            $('.tab-button').on('click', function() {
+                const tab = $(this).data('tab');
+                $('.tab-button').removeClass('active');
+                $(this).addClass('active');
+                $('.tab-content').hide();
+                $('#' + tab).show();
+            });
+        });
+    </script>
+</body>
+</html>

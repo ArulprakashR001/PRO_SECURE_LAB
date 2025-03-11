@@ -1,0 +1,204 @@
+/* General Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    color: #ff9f43;
+}
+
+.logo p {
+    font-size: 1rem;
+    color: #ddd;
+}
+
+.navbar {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link.active, .nav-link:hover {
+    color: #ff9f43;
+}
+
+/* Scan Section */
+.scan-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.scan-section h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.scan-section p {
+    font-size: 1.1rem;
+    color: #ddd;
+    margin-bottom: 20px;
+}
+
+#scanForm {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+#urlInput {
+    width: 60%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background: #ff9f43;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background: #ff7f00;
+}
+
+/* Progress Bar */
+.progress {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 10px;
+    background: #ff9f43;
+    transition: width 0.5s ease;
+}
+
+/* Results Section */
+.results-section {
+    margin-top: 30px;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.tab-button.active, .tab-button:hover {
+    background: #ff9f43;
+}
+
+.result-frame {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.result-frame h4 {
+    font-size: 1.5rem;
+    color: #ff9f43;
+    margin-bottom: 15px;
+}
+
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.result-table th, .result-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.result-table th {
+    background: rgba(255, 255, 255, 0.2);
+    font-weight: bold;
+}
+
+.severity {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.severity.high {
+    background: #f44336;
+}
+
+.severity.critical {
+    background: #d32f2f;
+}
+
+.severity.medium {
+    background: #ff9800;
+}
+
+.severity.low {
+    background: #4caf50;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 0.9rem;
+    color: #ddd;
+}
